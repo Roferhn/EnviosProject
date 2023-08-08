@@ -24,7 +24,7 @@ class User(models.Model):
 class Package(models.Model):
     tracking_num = models.TextField()
     locker = models.IntegerField()
-    weight = models.DecimalField()
+    weight = models.DecimalField(decimal_places=2,max_digits=4)
     reception_date = models.DateField()
     packaged_date = models.DateField()
 
@@ -34,5 +34,8 @@ class Shipping(models.Model):
     updated_date = models.DateField()
 
     SHIPPING_STATUS =(
-        ('1','')
+        ('1','Ready to ship'),
+        ('2','Shipped'),
+        ('3','Delivered at office')
     )
+    status = models.CharField(max_length=100,choices=SHIPPING_STATUS)
