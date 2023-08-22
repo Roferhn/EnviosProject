@@ -15,10 +15,10 @@ class User(models.Model):
     name = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    password = models.TextField(min_length=6) #Investigar e implementar hashing
+    password = models.TextField() #Investigar e implementar hashing
     phone = models.CharField(min_length=8, max_length=8)
     user_type= models.ForeignKey(User_Type, on_delete=models.CASCADE)
-    status = models.BooleanField(default=True)    
+    status = models.BooleanField(default=True)
     
     def __str__(self):
         return self.type
@@ -32,13 +32,12 @@ class Shipping_Status(models.Model):
 
 class Shipping_Type(models.Model):
     type = models.CharField(max_length=50)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return self.type
 
 class Shipping(models.Model):
-    locker = models.CharField(max_length=10, null=False)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     shipping_date = models.DateField()
     delicery_date = models.DateField()
@@ -57,12 +56,15 @@ class Pricing(models.Model):
     initial_date = models.DateField()
     final_date = models.DateField()
 
+    def __str__(self):
+        return self.type
+
 # ---Package Models---#
 class Package(models.Model):
     tracking_num = models.CharField(max_length=100)
-    reception_date = models.DateField(null=False )
-    packaged_date = models.DateField(null=False )
-    shipping_id = models.ForeignKey(Shipping,)
+    reception_date = models.DateField(null=False)
+    packaged_date = models.DateField(null=False)
+    shipping_id = models.ForeignKey(Shipping, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.type
@@ -70,3 +72,6 @@ class Package(models.Model):
 class Locker(models.Model):
     package_id = models.ForeignKey(Package, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.type
